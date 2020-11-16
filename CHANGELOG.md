@@ -8,7 +8,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [v0.1.0]
 
+### Added
 - Added initial project structure
 - Updated this file
 - Implemented basic classes
 - Implemented initial tests
+
+### Changed
+- None
+
+### Removed
+- None
