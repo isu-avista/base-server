@@ -11,8 +11,7 @@ class ServiceTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        os.chdir("..")
-        basedir = Path(os.getcwd()) / "test-data"
+        basedir = Path(__file__).parent.absolute() / ".." / "test-data"
         cls.write_env_file(basedir, "test.env")
         load_dotenv(os.path.join(basedir, 'test.env'))
 
