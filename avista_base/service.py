@@ -56,6 +56,8 @@ class Service(abc.ABC):
         logging.info("Starting")
         self._status = ServiceStatus.STARTING
 
+        self.run()
+
     def run(self):
         """Places the service into the running mode"""
         logging.info("Running")
