@@ -1,6 +1,5 @@
 import unittest
 from avista_base.service import Service
-from flask import Flask
 from avista_base.service_status import ServiceStatus
 from dotenv import load_dotenv
 from pathlib import Path
@@ -21,8 +20,7 @@ class ServiceTest(unittest.TestCase):
             f.write("CONFIG_PATH=" + basedir.__str__())
 
     def setUp(self):
-        app = Flask("Test")
-        self.service = Service(app, "Test")
+        self.service = Service("Test")
 
     def test_init(self):
         self.service.init()
