@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Deleted
 
+## [v0.1.2](https://github.com/isu-avista/base-server/releases/tag/v0.1.2) - 2020-12-13
+### Added
+
+### Changed
+- Added app_context to service
+- Updated service to use data_manager from data module
+- Updated tests
+
+### Deleted
+
 ## [v0.1.1](https://github.com/isu-avista/base-server/releases/tag/v0.1.1) - 2020-12-06
 ### Added
 
