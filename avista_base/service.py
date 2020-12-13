@@ -18,16 +18,15 @@ class Service(abc.ABC):
         _name (str): The service name
     """
 
-    def __init__(self, app, name):
-        """Constructs a new service the given app with the given name
+    def __init__(self, name):
+        """Constructs a new service the current app with the given name
 
         Args:
-            app (:obj: `Flask`): The flask app
             name (str): name of the service
         """
         self._status = ServiceStatus.IDLE
         self._config = None
-        self._app = app
+        self._app = None
         self._name = name
 
     def init(self):
@@ -48,7 +47,8 @@ class Service(abc.ABC):
         """Constructs the flask app"""
         self._app = Flask(self._name)
         self._app.config.from_mapping(self._config)
-        avista_data.init(self._app)
+        self._app.app_context().push()
+        avista_data.data_manager.init()
 
     def start(self):
         """Starts the service"""
