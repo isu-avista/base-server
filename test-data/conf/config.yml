@@ -1,2 +1,5 @@
 dbdata: {}
+service:
+  host: localhost
+  port: 5000
 sysdata: {}
