@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.1.6](https://github.com/isu-avista/base-server/releases/tag/v0.1.6) - 2020-12-15
+### Added
+
+### Changed
+* Minor change to fix get_log()
+
+### Removed
+
 ## [v0.1.5](https://github.com/isu-avista/base-server/releases/tag/v0.1.5) - 2020-12-15
 ### Added
 * New BaseTest base for both api and service tests
