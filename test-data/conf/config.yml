@@ -1,0 +1,39 @@
+---
+sysdata:
+  -
+    item: System Identifier
+    value: uuid.uuid4().hex
+    type: text
+  -
+    item: Equipment Monitored
+    value: Dryer 01
+    type: text
+  -
+    item: Location
+    value: ERC Rm 202
+    type: text
+  -
+    item: Data Collection Periodicity (ms)
+    value: 5000
+    type: number
+  -
+    item: Server Port
+    value: 5000
+    type: number
+dbdata:
+  -
+    item: DBMS IP Address
+    value: '127.0.0.1'
+    type: text
+  -
+    item: DBMS Port
+    value: 3306
+    type: number
+  -
+    item: DBMS Username
+    value: service
+    type: text
+  -
+    item: DBMS Password
+    value: '*******'
+    type: password
