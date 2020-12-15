@@ -11,6 +11,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.1.5](https://github.com/isu-avista/base-server/releases/tag/v0.1.5) - 2020-12-15
+### Added
+* New BaseTest base for both api and service tests
+
+### Changed
+* removed redundant calls to the service.init() method
+* refactored call to db.create_all()
+
+### Removed
+
 ## [v0.1.4](https://github.com/isu-avista/base-server/releases/tag/v0.1.4) - 2020-12-15
 ### Added
 * Service api component and tests
