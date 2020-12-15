@@ -9,6 +9,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+### Removed
+
+## [v0.1.3](https://github.com/isu-avista/base-server/releases/tag/v0.1.3) - 2020-12-15
+### Added
+
+* API components for both authentication (i.e. login)
+* API components for adding/removing users
+* API components for manipulating the service configuration (but not the flask config)
+* Tests for each of the API components
+
+### Changed
+
+* Updated the Service class to finally be ready to serve as the base for the portal and the IoT
+* Updated tests for the service
+
 ### Deleted
 
 ## [v0.1.2](https://github.com/isu-avista/base-server/releases/tag/v0.1.2) - 2020-12-13

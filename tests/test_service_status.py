@@ -3,6 +3,7 @@ from avista_base.service_status import ServiceStatus
 
 
 class ServiceStatusTest(unittest.TestCase):
+
     def test_from_str(self):
         oracle = [
             ["IDLE", ServiceStatus.IDLE],

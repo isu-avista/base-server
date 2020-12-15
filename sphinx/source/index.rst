@@ -28,6 +28,24 @@ ServiceStatus
 .. automodule:: avista_base.service_status
    :members:
 
+auth Auth
+=========
+
+.. automodule:: avista_base.auth.auth
+   :members:
+
+auth User
+=========
+
+.. automodule:: avista_base.auth.user
+   :members:
+
+api Config
+==========
+
+.. automodule:: avista_base.api.config
+   :members:
+
 Indices and tables
 ==================
 
