@@ -1,25 +1,11 @@
 import unittest
 from avista_base.service_status import ServiceStatus
-from dotenv import load_dotenv
-from pathlib import Path
 from avista_data import db
-import os
 from tests.mock_service import MockService
+from tests.base_test import BaseTest
 
 
-class ServiceTest(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        basedir = Path(__file__).parent.absolute() / ".." / "test-data"
-        cls.write_env_file(basedir, "test.env")
-        load_dotenv(os.path.join(basedir, 'test.env'))
-
-    @classmethod
-    def write_env_file(cls, basedir, file):
-        with open(basedir / file, "w") as f:
-            f.write("CONFIG_PATH=" + (basedir / 'conf').__str__() + "\n")
-            f.write("LOG_PATH=" + (basedir / 'logs').__str__())
+class ServiceTest(BaseTest):
 
     def setUp(self):
         self.service = MockService.get_instance()
@@ -38,7 +24,6 @@ class ServiceTest(unittest.TestCase):
         self.assertEqual(ServiceStatus.RUNNING, self.service.status())
 
     def test_restart(self):
-        self.service.init()
         self.service.start()
         self.service.restart()
         self.assertEqual(ServiceStatus.RUNNING, self.service.status())

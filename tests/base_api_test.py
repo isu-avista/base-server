@@ -2,28 +2,15 @@ import os
 import unittest
 from pathlib import Path
 from dotenv import load_dotenv
-
+from tests.base_test import BaseTest
 from tests.mock_service import MockService
 from avista_data import db
 
 
-class BaseApiTest(unittest.TestCase):
-
-    @classmethod
-    def setUpClass(cls):
-        basedir = Path(__file__).parent.absolute() / ".." / "test-data"
-        cls.write_env_file(basedir, "test.env")
-        load_dotenv(os.path.join(basedir, 'test.env'))
-
-    @classmethod
-    def write_env_file(cls, basedir, file):
-        with open(basedir / file, "w") as f:
-            f.write("CONFIG_PATH=" + (basedir / 'conf').__str__() + "\n")
-            f.write("LOG_PATH=" + (basedir / 'logs').__str__())
+class BaseApiTest(BaseTest):
 
     def setUp(self):
         self.server = MockService.get_instance()
-        self.server.init()
         self.server.start()
         self.client = self.server._app.test_client()
 

@@ -104,7 +104,6 @@ class Service(ABC):
 
     def _setup_database(self):
         avista_data.data_manager.init()
-        avista_data.data_manager.get_db().create_all()
         avista_data.populate_initial_data()
 
     def start(self):
@@ -112,7 +111,9 @@ class Service(ABC):
         self.init()
         logging.info("Starting")
         self._status = ServiceStatus.STARTING
-        self._proc = Process(target=self._app.run)
+        hostname = self._config['service']['host']
+        portnum = int(self._config['service']['port'])
+        self._proc = Process(target=self._app.run, kwargs={'host': hostname, 'port': portnum})
         self._proc.start()
 
         logging.info("Running")
@@ -132,7 +133,6 @@ class Service(ABC):
         """Restarts this service"""
         logging.info("Restarting")
         self.stop()
-        self.init()
         self.start()
 
     def status(self):
