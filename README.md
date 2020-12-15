@@ -57,7 +57,6 @@ To construct a new Service, you simply need to complete the following steps:
    app = PortalServer.get_instance().app
        
    if __name__ == '__main__':
-       PortalServer.get_instance().init()
        PortalServer.get_instance().start()
    ```
 
