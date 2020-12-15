@@ -46,6 +46,12 @@ api Config
 .. automodule:: avista_base.api.config
    :members:
 
+api Service
+===========
+
+.. automodule:: avista_base.api.service
+   :members:
+
 Indices and tables
 ==================
 
