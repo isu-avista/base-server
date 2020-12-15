@@ -183,6 +183,6 @@ class Service(ABC):
         Returns:
             a dictionary containing a single entry "log" which is the last five lines of the log file
         """
-        with open(self._log_file, "r") as a_file:
+        with open(self._log_path / self._log_file, "r") as a_file:
             lines = a_file.readlines()
             return dict(log='\n'.join(lines[-5:]))
