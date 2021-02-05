@@ -127,6 +127,7 @@ class Service(ABC, BaseApplication):
 
         logging.info("Running")
         self._status = ServiceStatus.RUNNING
+        self.run()
 
     def stop(self):
         """Stops the service"""
