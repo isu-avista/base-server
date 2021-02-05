@@ -50,7 +50,6 @@ class Service(ABC, BaseApplication):
             raise Exception("This class is a singletion!")
         else:
             Service._instance = self
-        super(Service, self).__init__()
         self._status = ServiceStatus.IDLE
         self._config = None
         self._config_path = Path(os.environ.get("CONFIG_PATH"))
@@ -64,6 +63,7 @@ class Service(ABC, BaseApplication):
         self._name = __name__
         self._proc = None
         self._jwt = None
+        super().__init__()
 
     def _init(self):
         """Initializes the service"""
