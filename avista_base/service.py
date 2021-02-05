@@ -122,8 +122,8 @@ class Service(ABC, BaseApplication):
         self._status = ServiceStatus.STARTING
         hostname = self._config['service']['host']
         portnum = int(self._config['service']['port'])
-        self._proc = Process(target=self.application.run, kwargs={'host': hostname, 'port': portnum})
-        self._proc.start()
+        # self._proc = Process(target=self.application.run, kwargs={'host': hostname, 'port': portnum})
+        # self._proc.start()
 
         logging.info("Running")
         self._status = ServiceStatus.RUNNING
