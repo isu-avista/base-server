@@ -65,7 +65,7 @@ class Service(ABC, BaseApplication):
         self._jwt = None
         super().__init__()
 
-    def _init(self):
+    def initialize(self):
         """Initializes the service"""
         self._setup_logging()
         logging.info("Initializing")
@@ -117,7 +117,6 @@ class Service(ABC, BaseApplication):
 
     def start(self):
         """Starts the service"""
-        self._init()
         logging.info("Starting")
         self._status = ServiceStatus.STARTING
         hostname = self._config['service']['host']
