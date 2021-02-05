@@ -114,6 +114,7 @@ class Service(ABC, BaseApplication):
     def _setup_database(self):
         avista_data.data_manager.init()
         avista_data.populate_initial_data()
+        avista_data.db.engine.dispose()
 
     def start(self):
         """Starts the service"""
