@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Welcome to avista-base-server’s documentation! &#8212; avista-base-server v0.1.6 documentation</title>
+    <title>Welcome to avista-base-server’s documentation! &#8212; avista-base-server v0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     
@@ -27,7 +27,7 @@
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">avista-base-server v0.1.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">avista-base-server v0.2.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Welcome to avista-base-server’s documentation!</a></li> 
       </ul>
     </div>  
@@ -61,12 +61,13 @@
 <span id="service"></span><h1>Service<a class="headerlink" href="#module-avista_base.service" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="avista_base.service.Service">
-<em class="property">class </em><code class="sig-prename descclassname">avista_base.service.</code><code class="sig-name descname">Service</code><a class="reference internal" href="_modules/avista_base/service.html#Service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">avista_base.service.</code><code class="sig-name descname">Service</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the base service class</p>
 <dl class="simple">
 <dt>Attributes:</dt><dd><p>_status (ServiceStatus): The current status of the service
 _config (dict): The app configuration
-_app (Flask): The Flask app
+application (Flask): The Flask app
+options (dict): Gunicorn options
 _name (str): The service name</p>
 </dd>
 </dl>
@@ -105,9 +106,21 @@ _name (str): The service name</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="avista_base.service.Service.init">
-<code class="sig-name descname">init</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.init"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.init" title="Permalink to this definition">¶</a></dt>
+<dt id="avista_base.service.Service.initialize">
+<code class="sig-name descname">initialize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.initialize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.initialize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initializes the service</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="avista_base.service.Service.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>This simply returns the flask application for the BaseApplication to use</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="avista_base.service.Service.load_config">
+<code class="sig-name descname">load_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This loads the gunicorn configurations for the gunicorn BaseApplication that is inherited from</p>
 </dd></dl>
 
 <dl class="py method">
@@ -244,7 +257,7 @@ _name (str): The service name</p>
         <li class="right" >
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">avista-base-server v0.1.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="#">avista-base-server v0.2.0 documentation</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">Welcome to avista-base-server’s documentation!</a></li> 
       </ul>
     </div>
