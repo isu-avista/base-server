@@ -7,8 +7,6 @@ from pathlib import Path
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from multiprocessing import Process
-import multiprocessing
 from avista_data.user import User
 import avista_data
 from gunicorn.app.base import BaseApplication
@@ -33,16 +31,12 @@ class Service(ABC, BaseApplication):
     def get_instance(cls):
         """ Static access method
 
-                Returns:
-                    The singleton instance of IoTServer
-                """
+        Returns:
+            The singleton instance of IoTServer
+        """
         if Service._instance is None:
             cls()
         return Service._instance
-
-    @classmethod
-    def number_of_workers(cls):
-        return (multiprocessing.cpu_count() * 2) + 1
 
     def __init__(self, options=None):
         """Constructs a new service the current app with the given name """
@@ -86,7 +80,7 @@ class Service(ABC, BaseApplication):
         self._config = config.load(self._config_path / self._config_file)
 
     def _load_flask_config(self):
-        """ """
+        """Loads flask configuration from file"""
         logging.info("Loading Flask Configuration")
 
         self._flask_config = config.load(self._config_path / self._flask_config_file)
@@ -121,11 +115,11 @@ class Service(ABC, BaseApplication):
         self._status = ServiceStatus.STARTING
         hostname = self._config['service']['host']
         portnum = int(self._config['service']['port'])
-        # self._proc = Process(target=self.application.run, kwargs={'host': hostname, 'port': portnum})
-        # self._proc.start()
 
         logging.info("Running")
         self._status = ServiceStatus.RUNNING
+        # run() is calling gunicorn.app.BaseApplication.run()
+        # Service does not have its own run method
         self.run()
 
     def stop(self):
@@ -197,10 +191,12 @@ class Service(ABC, BaseApplication):
             return dict(log='\n'.join(lines[-5:]))
 
     def load_config(self):
+        """This loads the gunicorn configurations for the gunicorn BaseApplication that is inherited from"""
         cfg = dict([(key, value) for key, value in self.options.items()
                     if key in self.cfg.settings and value is not None])
         for key, value in cfg.items():
             self.cfg.set(key.lower(), value)
 
     def load(self):
+        """This simply returns the flask application for the BaseApplication to use"""
         return self.application
