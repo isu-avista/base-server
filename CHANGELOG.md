@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.2.0](https://github.com/isu-avista/base-server/releases/tag/v0.2.0) - 2020-02-06
+### Added
+* Service now inherits from `gunicorn.app.BaseApplication`
+
+### Changed
+* `Service.start()` no longer creates a new `Process()` for the flask application,
+  Service.start() instead calls `gunicorn.app.BaseApplication.run()`
+* `Service.init()` is now called `Service.initialize()` as to not override `BaseApplication.init()`
+* `Service.start()` no longer calls `Service.initialize()` because inheriting classes may need
+  to do work in between `initialize()` and `start()`
+
 ## [v0.1.6](https://github.com/isu-avista/base-server/releases/tag/v0.1.6) - 2020-12-15
 ### Added
 

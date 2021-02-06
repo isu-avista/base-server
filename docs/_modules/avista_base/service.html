@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>avista_base.service &#8212; avista-base-server v0.1.6 documentation</title>
+    <title>avista_base.service &#8212; avista-base-server v0.2.0 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     
@@ -27,7 +27,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.1.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">avista_base.service</a></li> 
       </ul>
@@ -48,20 +48,21 @@
 <span class="kn">from</span> <span class="nn">flask</span> <span class="kn">import</span> <span class="n">Flask</span>
 <span class="kn">from</span> <span class="nn">flask_cors</span> <span class="kn">import</span> <span class="n">CORS</span>
 <span class="kn">from</span> <span class="nn">flask_jwt_extended</span> <span class="kn">import</span> <span class="n">JWTManager</span>
-<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Process</span>
 <span class="kn">from</span> <span class="nn">avista_data.user</span> <span class="kn">import</span> <span class="n">User</span>
 <span class="kn">import</span> <span class="nn">avista_data</span>
+<span class="kn">from</span> <span class="nn">gunicorn.app.base</span> <span class="kn">import</span> <span class="n">BaseApplication</span>
 <span class="kn">import</span> <span class="nn">logging</span>
 <span class="kn">import</span> <span class="nn">os</span>
 
 
-<div class="viewcode-block" id="Service"><a class="viewcode-back" href="../../index.html#avista_base.service.Service">[docs]</a><span class="k">class</span> <span class="nc">Service</span><span class="p">(</span><span class="n">ABC</span><span class="p">):</span>
+<div class="viewcode-block" id="Service"><a class="viewcode-back" href="../../index.html#avista_base.service.Service">[docs]</a><span class="k">class</span> <span class="nc">Service</span><span class="p">(</span><span class="n">ABC</span><span class="p">,</span> <span class="n">BaseApplication</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Represents the base service class</span>
 
 <span class="sd">    Attributes:</span>
 <span class="sd">        _status (ServiceStatus): The current status of the service</span>
 <span class="sd">        _config (dict): The app configuration</span>
-<span class="sd">        _app (Flask): The Flask app</span>
+<span class="sd">        application (Flask): The Flask app</span>
+<span class="sd">        options (dict): Gunicorn options</span>
 <span class="sd">        _name (str): The service name</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
@@ -71,14 +72,14 @@
     <span class="k">def</span> <span class="nf">get_instance</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Static access method</span>
 
-<span class="sd">                Returns:</span>
-<span class="sd">                    The singleton instance of IoTServer</span>
-<span class="sd">                &quot;&quot;&quot;</span>
+<span class="sd">        Returns:</span>
+<span class="sd">            The singleton instance of IoTServer</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Service</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">cls</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">Service</span><span class="o">.</span><span class="n">_instance</span></div>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructs a new service the current app with the given name &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">Service</span><span class="o">.</span><span class="n">_instance</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;This class is a singletion!&quot;</span><span class="p">)</span>
@@ -92,12 +93,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_flask_config_file</span> <span class="o">=</span> <span class="s1">&#39;flask.yml&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;LOG_PATH&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span> <span class="o">=</span> <span class="s1">&#39;server.log&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">options</span> <span class="o">=</span> <span class="n">options</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_name</span> <span class="o">=</span> <span class="vm">__name__</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_proc</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_jwt</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Service.init"><a class="viewcode-back" href="../../index.html#avista_base.service.Service.init">[docs]</a>    <span class="k">def</span> <span class="nf">init</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Service.initialize"><a class="viewcode-back" href="../../index.html#avista_base.service.Service.initialize">[docs]</a>    <span class="k">def</span> <span class="nf">initialize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Initializes the service&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_setup_logging</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Initializing&quot;</span><span class="p">)</span>
@@ -118,7 +121,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_path</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config_file</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_load_flask_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; &quot;&quot;&quot;</span>
+        <span class="sd">&quot;&quot;&quot;Loads flask configuration from file&quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading Flask Configuration&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_flask_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_path</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flask_config_file</span><span class="p">)</span>
@@ -127,16 +130,16 @@
         <span class="sd">&quot;&quot;&quot;Constructs the flask app&quot;&quot;&quot;</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Creating Flask App&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">from_mapping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flask_config</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">app_context</span><span class="p">()</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
-        <span class="n">CORS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="sa">r</span><span class="s2">&quot;/*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;origins&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">}})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_jwt</span> <span class="o">=</span> <span class="n">JWTManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_name</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">from_mapping</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_flask_config</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">app_context</span><span class="p">()</span><span class="o">.</span><span class="n">push</span><span class="p">()</span>
+        <span class="n">CORS</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="p">,</span> <span class="n">resources</span><span class="o">=</span><span class="p">{</span><span class="sa">r</span><span class="s2">&quot;/*&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;origins&quot;</span><span class="p">:</span> <span class="s2">&quot;*&quot;</span><span class="p">}})</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jwt</span> <span class="o">=</span> <span class="n">JWTManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">_setup_endpoints</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Registering Flask Endpoints&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">bp</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">bp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">auth</span><span class="o">.</span><span class="n">bp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">application</span><span class="o">.</span><span class="n">register_blueprint</span><span class="p">(</span><span class="n">api</span><span class="o">.</span><span class="n">bp</span><span class="p">)</span>
 
         <span class="nd">@self</span><span class="o">.</span><span class="n">_jwt</span><span class="o">.</span><span class="n">user_claims_loader</span>
         <span class="k">def</span> <span class="nf">add_claims_to_access_token</span><span class="p">(</span><span class="n">identity</span><span class="p">):</span>
@@ -149,16 +152,16 @@
 
 <div class="viewcode-block" id="Service.start"><a class="viewcode-back" href="../../index.html#avista_base.service.Service.start">[docs]</a>    <span class="k">def</span> <span class="nf">start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Starts the service&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">init</span><span class="p">()</span>
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Starting&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="o">.</span><span class="n">STARTING</span>
         <span class="n">hostname</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;service&#39;</span><span class="p">][</span><span class="s1">&#39;host&#39;</span><span class="p">]</span>
         <span class="n">portnum</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;service&#39;</span><span class="p">][</span><span class="s1">&#39;port&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_proc</span> <span class="o">=</span> <span class="n">Process</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_app</span><span class="o">.</span><span class="n">run</span><span class="p">,</span> <span class="n">kwargs</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;host&#39;</span><span class="p">:</span> <span class="n">hostname</span><span class="p">,</span> <span class="s1">&#39;port&#39;</span><span class="p">:</span> <span class="n">portnum</span><span class="p">})</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_proc</span><span class="o">.</span><span class="n">start</span><span class="p">()</span>
 
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Running&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="o">.</span><span class="n">RUNNING</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_status</span> <span class="o">=</span> <span class="n">ServiceStatus</span><span class="o">.</span><span class="n">RUNNING</span>
+        <span class="c1"># run() is calling gunicorn.app.BaseApplication.run()</span>
+        <span class="c1"># Service does not have its own run method</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">run</span><span class="p">()</span></div>
 
 <div class="viewcode-block" id="Service.stop"><a class="viewcode-back" href="../../index.html#avista_base.service.Service.stop">[docs]</a>    <span class="k">def</span> <span class="nf">stop</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Stops the service&quot;&quot;&quot;</span>
@@ -226,7 +229,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_log_path</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_log_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">a_file</span><span class="p">:</span>
             <span class="n">lines</span> <span class="o">=</span> <span class="n">a_file</span><span class="o">.</span><span class="n">readlines</span><span class="p">()</span>
-            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">log</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]))</span></div></div>
+            <span class="k">return</span> <span class="nb">dict</span><span class="p">(</span><span class="n">log</span><span class="o">=</span><span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lines</span><span class="p">[</span><span class="o">-</span><span class="mi">5</span><span class="p">:]))</span></div>
+
+<div class="viewcode-block" id="Service.load_config"><a class="viewcode-back" href="../../index.html#avista_base.service.Service.load_config">[docs]</a>    <span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This loads the gunicorn configurations for the gunicorn BaseApplication that is inherited from&quot;&quot;&quot;</span>
+        <span class="n">cfg</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">settings</span> <span class="ow">and</span> <span class="n">value</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">cfg</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">lower</span><span class="p">(),</span> <span class="n">value</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Service.load"><a class="viewcode-back" href="../../index.html#avista_base.service.Service.load">[docs]</a>    <span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;This simply returns the flask application for the BaseApplication to use&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">application</span></div></div>
 </pre></div>
 
             <div class="clearer"></div>
@@ -258,7 +272,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.1.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.2.0 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">avista_base.service</a></li> 
       </ul>
