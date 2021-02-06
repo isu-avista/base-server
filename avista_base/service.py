@@ -7,20 +7,21 @@ from pathlib import Path
 from flask import Flask
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
-from multiprocessing import Process
 from avista_data.user import User
 import avista_data
+from gunicorn.app.base import BaseApplication
 import logging
 import os
 
 
-class Service(ABC):
+class Service(ABC, BaseApplication):
     """Represents the base service class
 
     Attributes:
         _status (ServiceStatus): The current status of the service
         _config (dict): The app configuration
-        _app (Flask): The Flask app
+        application (Flask): The Flask app
+        options (dict): Gunicorn options
         _name (str): The service name
     """
 
@@ -30,14 +31,14 @@ class Service(ABC):
     def get_instance(cls):
         """ Static access method
 
-                Returns:
-                    The singleton instance of IoTServer
-                """
+        Returns:
+            The singleton instance of IoTServer
+        """
         if Service._instance is None:
             cls()
         return Service._instance
 
-    def __init__(self):
+    def __init__(self, options=None):
         """Constructs a new service the current app with the given name """
         if Service._instance is not None:
             raise Exception("This class is a singletion!")
@@ -51,12 +52,14 @@ class Service(ABC):
         self._flask_config_file = 'flask.yml'
         self._log_path = Path(os.environ.get("LOG_PATH"))
         self._log_file = 'server.log'
-        self._app = None
+        self.application = None
+        self.options = options or {}
         self._name = __name__
         self._proc = None
         self._jwt = None
+        super().__init__()
 
-    def init(self):
+    def initialize(self):
         """Initializes the service"""
         self._setup_logging()
         logging.info("Initializing")
@@ -77,7 +80,7 @@ class Service(ABC):
         self._config = config.load(self._config_path / self._config_file)
 
     def _load_flask_config(self):
-        """ """
+        """Loads flask configuration from file"""
         logging.info("Loading Flask Configuration")
 
         self._flask_config = config.load(self._config_path / self._flask_config_file)
@@ -86,16 +89,16 @@ class Service(ABC):
         """Constructs the flask app"""
         logging.info("Creating Flask App")
 
-        self._app = Flask(self._name)
-        self._app.config.from_mapping(self._flask_config)
-        self._app.app_context().push()
-        CORS(self._app, resources={r"/*": {"origins": "*"}})
-        self._jwt = JWTManager(self._app)
+        self.application = Flask(self._name)
+        self.application.config.from_mapping(self._flask_config)
+        self.application.app_context().push()
+        CORS(self.application, resources={r"/*": {"origins": "*"}})
+        self._jwt = JWTManager(self.application)
 
     def _setup_endpoints(self):
         logging.info("Registering Flask Endpoints")
-        self._app.register_blueprint(auth.bp)
-        self._app.register_blueprint(api.bp)
+        self.application.register_blueprint(auth.bp)
+        self.application.register_blueprint(api.bp)
 
         @self._jwt.user_claims_loader
         def add_claims_to_access_token(identity):
@@ -108,16 +111,16 @@ class Service(ABC):
 
     def start(self):
         """Starts the service"""
-        self.init()
         logging.info("Starting")
         self._status = ServiceStatus.STARTING
         hostname = self._config['service']['host']
         portnum = int(self._config['service']['port'])
-        self._proc = Process(target=self._app.run, kwargs={'host': hostname, 'port': portnum})
-        self._proc.start()
 
         logging.info("Running")
         self._status = ServiceStatus.RUNNING
+        # run() is calling gunicorn.app.BaseApplication.run()
+        # Service does not have its own run method
+        self.run()
 
     def stop(self):
         """Stops the service"""
@@ -186,3 +189,14 @@ class Service(ABC):
         with open(self._log_path / self._log_file, "r") as a_file:
             lines = a_file.readlines()
             return dict(log='\n'.join(lines[-5:]))
+
+    def load_config(self):
+        """This loads the gunicorn configurations for the gunicorn BaseApplication that is inherited from"""
+        cfg = dict([(key, value) for key, value in self.options.items()
+                    if key in self.cfg.settings and value is not None])
+        for key, value in cfg.items():
+            self.cfg.set(key.lower(), value)
+
+    def load(self):
+        """This simply returns the flask application for the BaseApplication to use"""
+        return self.application
