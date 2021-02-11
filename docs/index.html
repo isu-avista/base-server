@@ -61,12 +61,12 @@
 <span id="service"></span><h1>Service<a class="headerlink" href="#module-avista_base.service" title="Permalink to this headline">¶</a></h1>
 <dl class="py class">
 <dt id="avista_base.service.Service">
-<em class="property">class </em><code class="sig-prename descclassname">avista_base.service.</code><code class="sig-name descname">Service</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">avista_base.service.</code><code class="sig-name descname">Service</code><a class="reference internal" href="_modules/avista_base/service.html#Service"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service" title="Permalink to this definition">¶</a></dt>
 <dd><p>Represents the base service class</p>
 <dl class="simple">
 <dt>Attributes:</dt><dd><p>_status (ServiceStatus): The current status of the service
 _config (dict): The app configuration
-application (Flask): The Flask app
+_app (Flask): The Flask app
 options (dict): Gunicorn options
 _name (str): The service name</p>
 </dd>
@@ -112,18 +112,6 @@ _name (str): The service name</p>
 </dd></dl>
 
 <dl class="py method">
-<dt id="avista_base.service.Service.load">
-<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.load" title="Permalink to this definition">¶</a></dt>
-<dd><p>This simply returns the flask application for the BaseApplication to use</p>
-</dd></dl>
-
-<dl class="py method">
-<dt id="avista_base.service.Service.load_config">
-<code class="sig-name descname">load_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.load_config" title="Permalink to this definition">¶</a></dt>
-<dd><p>This loads the gunicorn configurations for the gunicorn BaseApplication that is inherited from</p>
-</dd></dl>
-
-<dl class="py method">
 <dt id="avista_base.service.Service.restart">
 <code class="sig-name descname">restart</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.restart"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.restart" title="Permalink to this definition">¶</a></dt>
 <dd><p>Restarts this service</p>
@@ -158,6 +146,26 @@ _name (str): The service name</p>
 <dt id="avista_base.service.Service.stop">
 <code class="sig-name descname">stop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/service.html#Service.stop"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.service.Service.stop" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stops the service</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-avista_base.avista_app">
+<span id="avistaapp"></span><h1>AvistaApp<a class="headerlink" href="#module-avista_base.avista_app" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="avista_base.avista_app.AvistaApp">
+<em class="property">class </em><code class="sig-prename descclassname">avista_base.avista_app.</code><code class="sig-name descname">AvistaApp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">app</span></em>, <em class="sig-param"><span class="n">options</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/avista_app.html#AvistaApp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.avista_app.AvistaApp" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="py method">
+<dt id="avista_base.avista_app.AvistaApp.load">
+<code class="sig-name descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/avista_app.html#AvistaApp.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.avista_app.AvistaApp.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>This simply returns the flask application for the BaseApplication to use</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="avista_base.avista_app.AvistaApp.load_config">
+<code class="sig-name descname">load_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/avista_base/avista_app.html#AvistaApp.load_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#avista_base.avista_app.AvistaApp.load_config" title="Permalink to this definition">¶</a></dt>
+<dd><p>This loads the gunicorn configurations for the gunicorn BaseApplication that is inherited from</p>
 </dd></dl>
 
 </dd></dl>
@@ -219,6 +227,7 @@ _name (str): The service name</p>
 <li><a class="reference internal" href="#">Welcome to avista-base-server’s documentation!</a></li>
 <li><a class="reference internal" href="#module-avista_base.config">Config</a></li>
 <li><a class="reference internal" href="#module-avista_base.service">Service</a></li>
+<li><a class="reference internal" href="#module-avista_base.avista_app">AvistaApp</a></li>
 <li><a class="reference internal" href="#module-avista_base.service_status">ServiceStatus</a></li>
 <li><a class="reference internal" href="#module-avista_base.auth.auth">auth Auth</a></li>
 <li><a class="reference internal" href="#module-avista_base.auth.user">auth User</a></li>
@@ -262,7 +271,7 @@ _name (str): The service name</p>
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2020, Isaac Griffith.
+        &#169; Copyright 2020-2021, Isaac Griffith.
       Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 3.3.1.
     </div>
   </body>

@@ -71,7 +71,7 @@ This module was contributed to by:
 
 ## License
 
-Copyright (c) 2020 Idaho State University Empirical Software Engineering Laboratory
+Copyright (c) 2020, 2021 Idaho State University Empirical Software Engineering Laboratory
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
