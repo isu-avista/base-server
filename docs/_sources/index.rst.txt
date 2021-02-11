@@ -22,6 +22,12 @@ Service
 .. automodule:: avista_base.service
    :members:
 
+AvistaApp
+=========
+
+.. automodule:: avista_base.avista_app
+   :members:
+
 ServiceStatus
 =============
 

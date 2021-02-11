@@ -19,7 +19,7 @@ sys.setrecursionlimit(1500)
 # -- Project information -----------------------------------------------------
 
 project = 'avista-base-server'
-copyright = '2020, Isaac Griffith'
+copyright = '2020-2021, Isaac Griffith'
 author = 'Isaac Griffith'
 
 # The full version, including alpha/beta/rc tags

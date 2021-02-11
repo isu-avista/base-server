@@ -16,7 +16,7 @@ class ServiceTest(BaseTest):
             self.service.stop()
 
     def test_init(self):
-        self.service.init()
+        self.service.initialize()
         self.assertEqual(ServiceStatus.INITIALIZING, self.service.status())
 
     def test_start(self):
