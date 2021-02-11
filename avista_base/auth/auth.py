@@ -2,11 +2,9 @@ from avista_base.auth import bp
 from avista_data.user import User
 from flask import request, jsonify
 from flask_jwt_extended import create_access_token
-from flask_cors import cross_origin
 
 
 @bp.route('/api/login', methods=['POST'])
-@cross_origin()
 def login():
     if not request.is_json:
         return jsonify({"msg": "Missing JSON in request"}), 400
