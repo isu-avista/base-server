@@ -11,6 +11,7 @@ class BaseApiTest(BaseTest):
 
     def setUp(self):
         self.server = MockService.get_instance()
+        self.server.initialize()
         self.server.start()
         self.client = self.server._app.test_client()
 
