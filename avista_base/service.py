@@ -92,7 +92,7 @@ class Service(ABC, BaseApplication):
         self.application = Flask(self._name)
         self.application.config.from_mapping(self._flask_config)
         self.application.app_context().push()
-        CORS(self.application, resources={r"/.*": {"origins": "*"}})
+        CORS(self.application, resources={r"/*": {"origins": "*"}})
         self._jwt = JWTManager(self.application)
 
     def _setup_endpoints(self):

@@ -23,6 +23,7 @@ def login():
     token = create_access_token(identity=user.get_email())
     dct = user.to_dict()
     dct['token'] = token
+    dct['Access-Control-Allow-Origin'] = '*'
     return jsonify(dct), 200
 
 
