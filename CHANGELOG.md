@@ -11,7 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [v0.3.2](https://github.com/isu-avista/base-server/releases/tag/v0.3.2) - 2020-02-15
+## [v0.3.3](https://github.com/isu-avista/base-server/releases/tag/v0.3.3) - 2021-02-15
+### Added
+
+### Changed
+* Fixed minor mistake in service.py
+
+### Removed
+
+## [v0.3.2](https://github.com/isu-avista/base-server/releases/tag/v0.3.2) - 2021-02-15
 ### Added
 
 ### Changed
@@ -19,7 +27,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [v0.3.1](https://github.com/isu-avista/base-server/releases/tag/v0.3.1) - 2020-02-14
+## [v0.3.1](https://github.com/isu-avista/base-server/releases/tag/v0.3.1) - 2021-02-14
 ### Added
 
 ### Changed
@@ -27,7 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [v0.3.0](https://github.com/isu-avista/base-server/releases/tag/v0.3.0) - 2020-02-11
+## [v0.3.0](https://github.com/isu-avista/base-server/releases/tag/v0.3.0) - 2021-02-11
 ### Added
 * AvistaApp which sets up the use of Gunicorn for production
 
@@ -36,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 * Moved the basic flask operation, for testing, into the MockService under the test director
 * Updated documentation
 
-## [v0.2.0](https://github.com/isu-avista/base-server/releases/tag/v0.2.0) - 2020-02-06
+## [v0.2.0](https://github.com/isu-avista/base-server/releases/tag/v0.2.0) - 2021-02-06
 ### Added
 * Service now inherits from `gunicorn.app.BaseApplication`
 
