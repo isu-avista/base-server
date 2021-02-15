@@ -84,6 +84,25 @@ class Service(ABC):
         logging.info("Loading Flask Configuration")
 
         self._flask_config = config.load(self._config_path / self._flask_config_file)
+        uri = self.__generate_db_uri()
+        self._flask_config['SQLALCHEMY_DATABASE_URI'] = uri
+
+    def __generate_db_uri(self):
+        type = ip = port = user = passwd = db = ""
+        for item in self._config['dbdata']:
+            if item['item'] == "DBMS Type":
+                type = item['type']
+            elif item['item'] == "DBMS IP Address":
+                ip = item['value']
+            elif item['item'] == "DBMS Port":
+                port = item['value']
+            elif item['item'] == "DBMS Username":
+                user = item['value']
+            elif item['item'] == "DBMS Password":
+                passwd = item['value']
+            elif item['item'] == "DBMS DB Name":
+                db = item['value']
+        return f'{type}://{user}:{passwd}@{ip}:{port}/{db}'
 
     def _create_app(self):
         """Constructs the flask app"""

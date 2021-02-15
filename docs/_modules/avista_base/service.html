@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>avista_base.service &#8212; avista-base-server v0.2.0 documentation</title>
+    <title>avista_base.service &#8212; avista-base-server v0.3.1 documentation</title>
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     
@@ -27,7 +27,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.3.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">avista_base.service</a></li> 
       </ul>
@@ -125,6 +125,25 @@
         <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;Loading Flask Configuration&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_flask_config</span> <span class="o">=</span> <span class="n">config</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_config_path</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_flask_config_file</span><span class="p">)</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__generate_db_uri</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_flask_config</span><span class="p">[</span><span class="s1">&#39;SQLALCHEMY_DATABASE_URI&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">uri</span>
+
+    <span class="k">def</span> <span class="nf">__generate_db_uri</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="nb">type</span> <span class="o">=</span> <span class="n">ip</span> <span class="o">=</span> <span class="n">port</span> <span class="o">=</span> <span class="n">user</span> <span class="o">=</span> <span class="n">passwd</span> <span class="o">=</span> <span class="n">db</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_config</span><span class="p">[</span><span class="s1">&#39;dbdata&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DBMS Type&quot;</span><span class="p">:</span>
+                <span class="nb">type</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DBMS IP Address&quot;</span><span class="p">:</span>
+                <span class="n">ip</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DBMS Port&quot;</span><span class="p">:</span>
+                <span class="n">port</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DBMS Username&quot;</span><span class="p">:</span>
+                <span class="n">user</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DBMS Password&quot;</span><span class="p">:</span>
+                <span class="n">passwd</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;item&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;DBMS DB Name&quot;</span><span class="p">:</span>
+                <span class="n">db</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="nb">type</span><span class="si">}</span><span class="s1">://</span><span class="si">{</span><span class="n">user</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">passwd</span><span class="si">}</span><span class="s1">@</span><span class="si">{</span><span class="n">ip</span><span class="si">}</span><span class="s1">:</span><span class="si">{</span><span class="n">port</span><span class="si">}</span><span class="s1">/</span><span class="si">{</span><span class="n">db</span><span class="si">}</span><span class="s1">&#39;</span>
 
     <span class="k">def</span> <span class="nf">_create_app</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Constructs the flask app&quot;&quot;&quot;</span>
@@ -267,7 +286,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">avista-base-server v0.3.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &#187;</li>
         <li class="nav-item nav-item-this"><a href="">avista_base.service</a></li> 
       </ul>
