@@ -66,6 +66,7 @@ class Service(ABC):
         self._status = ServiceStatus.INITIALIZING
         self._load_config()
         self._load_flask_config()
+        print(_flask_config['SQLALCHEMY_DATABASE_URI'])
         self._create_app()
         self._setup_database()
         self._setup_endpoints()
@@ -91,7 +92,7 @@ class Service(ABC):
         type = ip = port = user = passwd = db = ""
         for item in self._config['dbdata']:
             if item['item'] == "DBMS Type":
-                type = item['type']
+                type = item['value']
             elif item['item'] == "DBMS IP Address":
                 ip = item['value']
             elif item['item'] == "DBMS Port":
