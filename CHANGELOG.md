@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.3.1](https://github.com/isu-avista/base-server/releases/tag/v0.3.0) - 2020-02-14
+### Added
+
+### Changed
+* Added code to extract the correct database settings from the configuration files
+
+### Removed
+
 ## [v0.3.0](https://github.com/isu-avista/base-server/releases/tag/v0.3.0) - 2020-02-11
 ### Added
 * AvistaApp which sets up the use of Gunicorn for production
