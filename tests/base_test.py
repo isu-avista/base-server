@@ -3,6 +3,7 @@ from dotenv import load_dotenv
 from pathlib import Path
 import os
 
+
 class BaseTest(unittest.TestCase):
 
     @classmethod

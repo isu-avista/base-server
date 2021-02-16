@@ -29,6 +29,7 @@ class BaseApiTest(BaseTest):
     @staticmethod
     def _create_auth_header(client, email, password):
         credentials = BaseApiTest.__login(client, email, password)
+        print(f'Credentials: {credentials.get_json()}')
         return {
             'Authorization': f'Bearer {credentials.get_json()["token"]}'
         }

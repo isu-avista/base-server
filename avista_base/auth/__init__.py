@@ -27,6 +27,7 @@ def role_required(role):
             """ The actual rapper function which both validates a jwt token and a role """
             verify_jwt_in_request()
             claims = get_jwt_claims()
+            print(f'Role: {claims["role"]}')
             if Role.from_str(claims['role']) < role:
                 return jsonify({'msg': 'Role level too low'}), 403
             else:
