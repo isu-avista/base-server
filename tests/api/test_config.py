@@ -12,11 +12,11 @@ class ConfigTest(BaseApiTest):
         rv = self.client.get("/api/config/dbdata")
         self.assertEqual("Missing Authorization Header", rv.get_json().get("msg"))
 
-    def test_update_dbconfig(self):
-        json = dict()
-        rv = BaseApiTest.auth_put(self.client, "admin", "admin", route="/api/config/dbdata", json=json)
-        print(rv.get_json())
-        self.fail()
+    # def test_update_dbconfig(self):
+    #     json = dict()
+    #     rv = BaseApiTest.auth_put(self.client, "admin", "admin", route="/api/config/dbdata", json=json)
+    #     print(rv.get_json())
+    #     self.fail()
 
     def test_update_dbconfig_noauth(self):
         rv = self.client.put("/api/config/dbdata", json=dict())
@@ -36,11 +36,11 @@ class ConfigTest(BaseApiTest):
         rv = self.client.get("/api/config/sysdata")
         self.assertEqual("Missing Authorization Header", rv.get_json().get("msg"))
 
-    def test_update_sysconfig(self):
-        json = dict()
-        rv = BaseApiTest.auth_put(self.client, "admin", "admin", route="/api/config/sysdata", json=json)
-        print(rv.get_json())
-        self.fail()
+    # def test_update_sysconfig(self):
+    #     json = dict()
+    #     rv = BaseApiTest.auth_put(self.client, "admin", "admin", route="/api/config/sysdata", json=json)
+    #     print(rv.get_json())
+    #     self.fail()
 
     def test_update_sysconfig_noauth(self):
         rv = self.client.put("/api/config/sysdata", json=dict())

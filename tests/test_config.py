@@ -11,7 +11,8 @@ class ConfigTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        os.chdir("..")
+        while not os.path.isdir("./test-data"):
+            os.chdir("..")
 
     def setUp(self):
         self.basedir = Path(os.getcwd())

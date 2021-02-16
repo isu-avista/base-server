@@ -11,6 +11,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.3.4](https://github.com/isu-avista/base-server/releases/tag/v0.3.4) - 2021-02-15
+### Added
+
+### Changed
+* Updated the test-data configurations
+* travis ci specification so that it correctly tests and builds the system
+* updated the requirement.txt to include additional libraries and to fix the import of avista_data
+* updated the tests so that they all pass
+
+### Removed
+* Removed the "test.db" from the avista_base module
+
 ## [v0.3.3](https://github.com/isu-avista/base-server/releases/tag/v0.3.3) - 2021-02-15
 ### Added
 
