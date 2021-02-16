@@ -23,7 +23,7 @@ copyright = '2020-2021, Isaac Griffith'
 author = 'Isaac Griffith'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.3.3'
+release = 'v0.3.4'
 
 
 # -- General configuration ---------------------------------------------------
