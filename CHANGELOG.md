@@ -11,7 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
-## [v0.3.4](https://github.com/isu-avista/base-server/releases/tag/v0.3.4) - 2021-02-15
+## [v0.3.5](https://github.com/isu-avista/base-server/releases/tag/v0.3.5) - 2021-02-16
+### Added
+
+### Changed
+* removed python 3.6 from travis ci build
+
+### Removed
+
+## [v0.3.4](https://github.com/isu-avista/base-server/releases/tag/v0.3.4) - 2021-02-16
 ### Added
 
 ### Changed
