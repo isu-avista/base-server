@@ -11,6 +11,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.3.6](https://github.com/isu-avista/base-server/releases/tag/v0.3.6) - 2021-02-17
+### Added
+
+### Changed
+* Modified service create app to allow CORS across all domains and for all routes
+
+### Removed
+
 ## [v0.3.5](https://github.com/isu-avista/base-server/releases/tag/v0.3.5) - 2021-02-16
 ### Added
 
