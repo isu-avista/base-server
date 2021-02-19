@@ -1,10 +1,7 @@
-import os
 import unittest
-from pathlib import Path
-from dotenv import load_dotenv
 from tests.base_test import BaseTest
 from tests.mock_service import MockService
-from avista_data import db
+import avista_data
 
 
 class BaseApiTest(BaseTest):
@@ -16,7 +13,8 @@ class BaseApiTest(BaseTest):
         self.client = self.server._app.test_client()
 
     def tearDown(self):
-        db.drop_all()
+        # self.server._app.session.remove()
+        avista_data.database.clear_data()
         self.server.stop()
 
     @staticmethod

@@ -1,5 +1,6 @@
 from avista_base.service import Service
 from multiprocessing import Process
+import avista_data
 
 
 class MockService(Service):
@@ -10,6 +11,7 @@ class MockService(Service):
 
     def start(self):
         super().start()
+        self._app.session = avista_data.database.db
         self._proc = Process(target=self._app.run, kwargs={'host': self.hostname, 'port': self.port})
         self._proc.start()
 

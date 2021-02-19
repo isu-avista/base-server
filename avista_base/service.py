@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
-from multiprocessing import Process
+from avista_data.database import SessionLocal
 from avista_base.service_status import ServiceStatus
+from sqlalchemy.orm import scoped_session
 from avista_base import auth
 from avista_base import api
 from avista_base import config
 from pathlib import Path
-from flask import Flask
+from flask import Flask, _app_ctx_stack
 from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from avista_data.user import User
@@ -21,7 +22,6 @@ class Service(ABC):
         _status (ServiceStatus): The current status of the service
         _config (dict): The app configuration
         _app (Flask): The Flask app
-        options (dict): Gunicorn options
         _name (str): The service name
     """
 
@@ -90,10 +90,10 @@ class Service(ABC):
             self._flask_config['SQLALCHEMY_DATABASE_URI'] = uri
 
     def __generate_db_uri(self):
-        type = ip = port = user = passwd = db = None
+        typ = ip = port = user = passwd = db = None
         for item in self._config['dbdata']:
             if item['item'] == "DBMS Type":
-                type = item['value']
+                typ = item['value']
             elif item['item'] == "DBMS IP Address":
                 ip = item['value']
             elif item['item'] == "DBMS Port":
@@ -114,7 +114,7 @@ class Service(ABC):
             ip_port = f'{ip}:{port}'
         elif ip and not port:
             ip_port = ip
-        return f'{type}://{user_pass}{ip_port}/{db}'
+        return f'{typ}://{user_pass}{ip_port}/{db}'
 
     def _create_app(self):
         """Constructs the flask app"""
@@ -137,8 +137,10 @@ class Service(ABC):
             return {'role': str(user.get_role())}
 
     def _setup_database(self):
-        avista_data.data_manager.init()
-        avista_data.populate_initial_data()
+        avista_data.database.init(self._flask_config['SQLALCHEMY_DATABASE_URI'])
+        avista_data.database.populate_initial_data()
+        print("SL:", avista_data.database.SessionLocal)
+        self._app.session = scoped_session(avista_data.database.SessionLocal, scopefunc=_app_ctx_stack.__ident_func__)
 
     def start(self):
         """Starts the service"""
@@ -157,6 +159,7 @@ class Service(ABC):
 
         self._proc.terminate()
         self._proc.join()
+        # self._app.session.remove()
 
         self._status = ServiceStatus.IDLE
 

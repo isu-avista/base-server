@@ -7,7 +7,7 @@ dbdata:
     value: test.db
   - item: DBMS IP Address
     type: text
-    value: /../test-data
+    value: /./test-data
   - item: DBMS Port
     type: text
     value: ''
