@@ -11,6 +11,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Removed
 
+## [v0.3.7](https://github.com/isu-avista/base-server/releases/tag/v0.3.7) - 2021-02-19
+### Added
+
+### Changed
+* Modified the routes and service to use the changes in data
+* Modified tests to comply with the new method of accessing the database
+
+### Removed
+
 ## [v0.3.6](https://github.com/isu-avista/base-server/releases/tag/v0.3.6) - 2021-02-17
 ### Added
 

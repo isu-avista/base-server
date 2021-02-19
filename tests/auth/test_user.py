@@ -2,7 +2,6 @@ import unittest
 from tests.base_api_test import BaseApiTest
 from avista_data.user import User
 from avista_data.role import Role
-from avista_data.data_manager import get_db
 
 
 class UserTest(BaseApiTest):
@@ -15,8 +14,10 @@ class UserTest(BaseApiTest):
         self.user.set_role(Role.USER)
         self.user.set_email("foo@bar.com")
         self.user.set_password("password")
-        get_db().session.add(self.user)
-        get_db().session.commit()
+        print("app:", self.server._app)
+        print("app.session", self.server._app.session)
+        self.server._app.session.add(self.user)
+        self.server._app.session.commit()
 
     def test_create_user(self):
         json = dict(

@@ -8,7 +8,9 @@ class BaseTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        basedir = Path(__file__).parent.absolute() / ".." / "test-data"
+        while not os.path.isdir("test-data"):
+            os.chdir("..")
+        basedir = Path(os.getcwd()).absolute() / "test-data"
         cls.write_env_file(basedir, "test.env")
         load_dotenv(os.path.join(basedir, 'test.env'))
 

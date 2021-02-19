@@ -1,6 +1,5 @@
 import unittest
 from avista_base.service_status import ServiceStatus
-from avista_data import db
 from tests.mock_service import MockService
 from tests.base_test import BaseTest
 
@@ -11,7 +10,6 @@ class ServiceTest(BaseTest):
         self.service = MockService.get_instance()
 
     def tearDown(self):
-        db.drop_all()
         if self.service.status() == ServiceStatus.RUNNING:
             self.service.stop()
 
